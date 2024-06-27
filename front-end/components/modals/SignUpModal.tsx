@@ -1,18 +1,16 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 
 import SignUpForm from './SignUpForm';
 
-interface SignUpModalProps {
+interface PropsType {
 	show: boolean;
 	onClose: () => void;
 }
 
-const SignUpModal = ({
-	show,
-	onClose,
-}: SignUpModalProps): ReactElement | null => {
+const SignUpModal = ({ show, onClose }: PropsType): JSX.Element | null => {
 	const [isBrowser, setIsBrowser] = useState(false);
+
 	useEffect(() => {
 		setIsBrowser(true);
 	}, []);
@@ -22,14 +20,14 @@ const SignUpModal = ({
 	};
 
 	const modalContent = show ? (
-		<div className="fixed top-0 left-0 w-full h-full flex justify-center items-center">
+		<div className="fixed top-0 left-0 flex items-center justify-center w-full h-full">
 			<div className="z-[2] bg-white w-[450px] h-[570px] rounded-[15px] py-10 px-[60px]">
 				<div className="flex justify-end text-3xl cursor-pointer">
 					<div onClick={handleCloseClick}>X</div>
 				</div>
 
 				<div>
-					<h1 className="m-0 font-bold text-2xl">회원가입</h1>
+					<h1 className="m-0 text-2xl font-bold">회원가입</h1>
 					<SignUpForm onClose={onClose} />
 				</div>
 			</div>

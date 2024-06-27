@@ -1,34 +1,58 @@
-import React, { ReactElement } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
 
-import MainBanner from '@components/Main/MainBanner';
+import CurationFloatingBar from '@components/Main/CurationFloatingBar';
+import ScrollToTopButton from '@components/ScrollToTopButton';
 import CourseList from '@components/Main/CourseList';
-import { RecentLecture } from '@components/Main/RecentLecture';
-import { selectIsLoggined } from 'store/feature/common/commonSelector';
-import { userLoginAuthState } from 'constants/commonState';
+import MainBanner from '@components/Main/MainBanner';
+import mainAPI from '../apis/Main/index';
+import { MainCourse } from 'types/Main';
 
-const Index = (): ReactElement => {
-	const isLoggined = useSelector(selectIsLoggined);
+type PropsType = {
+	recommendedContents: MainCourse[][];
+};
+
+const scroll = 'scroll';
+const titles = ['나를 위한 추천 👍', '신규 컨텐츠 추천 😃'];
+
+const MainPage = ({ recommendedContents }: PropsType): JSX.Element => {
+	const [scrollY, setScrollY] = useState(0);
+
+	useEffect(() => {
+		const handleScroll = () => {
+			setScrollY(window.scrollY);
+		};
+
+		window.addEventListener(scroll, handleScroll);
+
+		return () => {
+			window.removeEventListener(scroll, handleScroll);
+		};
+	}, []);
 
 	return (
-		<>
+		<section className="relative">
 			<MainBanner />
-			<div className='w-[1280px] m-auto font-["Noto Sans KR"]'>
-				{!!isLoggined && isLoggined === userLoginAuthState.LOGGINED && (
-					<RecentLecture />
-				)}
-				<CourseList headerText={'인기 강좌'} headerColor={'red'} />
-				<CourseList
-					headerText={'프로그래밍 분야 인기 강좌 모음'}
-					headerColor={'purple'}
-				/>
-				<CourseList
-					headerText={'보안 분야 인기 강좌 모음'}
-					headerColor={'#df4bff'}
-				/>
+			<CurationFloatingBar />
+			<div className="relative w-[1280px] m-auto font-['Noto Sans KR'] mb-32">
+				{titles.map((title, idx) => (
+					<CourseList
+						headerText={`${title}`}
+						contents={recommendedContents[idx]}
+						key={title}
+					/>
+				))}
 			</div>
-		</>
+			{!!scrollY && <ScrollToTopButton />}
+		</section>
 	);
 };
 
-export default Index;
+export async function getServerSideProps(): Promise<{
+	props: { recommendedContents: MainCourse[][] };
+}> {
+	const recommendedContents = await mainAPI.fetchRecommendedCourse();
+
+	return { props: { recommendedContents } };
+}
+
+export default MainPage;

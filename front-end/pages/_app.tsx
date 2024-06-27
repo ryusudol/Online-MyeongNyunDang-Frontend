@@ -1,17 +1,20 @@
 import React, { ReactElement, useEffect } from 'react';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { NextPage } from 'next';
-import { AppProps } from 'next/app';
-import Head from 'next/head';
 import { AxiosError, AxiosResponse } from 'axios';
+import { AppProps } from 'next/app';
+import { NextPage } from 'next';
+import Head from 'next/head';
 
-import { store } from 'store/app/store';
-import { userLoginAuthState } from '../constants/commonState';
-import { HTTP_STATUS_CODE } from '../constants/http';
-import { selectIsLoggined } from 'store/feature/common/commonSelector';
+import { userLoginAuthState, userState } from '../constants/commonState';
+import {
+	selectIsLoggined,
+	selectUserType,
+} from 'store/feature/common/commonSelector';
 import { commonActions } from 'store/feature/common/commonSlice';
+import { HTTP_STATUS_CODE } from '../constants/http';
 import GlobalStyles from 'styles/GlobalStyles';
+import { store } from 'store/app/store';
 import Layout from '@components/Layout';
 import axiosInstance from 'apis';
 import '../styles/output.css';
@@ -31,15 +34,22 @@ const queryClient = new QueryClient({
 
 function MyComponent({ children }: { children: ReactElement }) {
 	const dispatch = useDispatch();
+
 	const isLoggined = useSelector(selectIsLoggined);
+	const userType = useSelector(selectUserType);
 
 	useEffect(() => {
-		if (isLoggined === userLoginAuthState.NOT_CHECKED_YET) {
+		if (
+			isLoggined === userLoginAuthState.NOT_CHECKED_YET ||
+			userType >= userState.USER
+		) {
 			axiosInstance
-				.get('auth/profile')
+				.get('/auth/profile')
 				.then((res: AxiosResponse) => {
 					if (res.status === HTTP_STATUS_CODE.OK) {
 						dispatch(commonActions.setIsLoggined(userLoginAuthState.LOGGINED));
+						dispatch(commonActions.setUserType(res.data.role));
+						dispatch(commonActions.setUserNickname(res.data.nickname));
 					}
 				})
 				.catch((e: AxiosError) => {
@@ -51,10 +61,11 @@ function MyComponent({ children }: { children: ReactElement }) {
 						dispatch(
 							commonActions.setIsLoggined(userLoginAuthState.NOT_LOGGINED),
 						);
+						dispatch(commonActions.setUserType(userState.NOT_LOGGED_IN));
 					}
 				});
 		}
-	}, [dispatch, isLoggined]);
+	}, [dispatch, isLoggined, userType]);
 
 	return <>{children}</>;
 }
@@ -63,7 +74,7 @@ const MyApp: NextPage<AppProps> = ({ Component, pageProps }: AppProps) => {
 	return (
 		<QueryClientProvider client={queryClient}>
 			<Head>
-				<title>온라인 명륜당</title>
+				<title>온라인명륜당</title>
 			</Head>
 			<Provider store={store}>
 				<MyComponent>

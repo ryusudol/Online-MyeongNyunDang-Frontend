@@ -1,52 +1,31 @@
-import React, { ReactElement } from 'react';
-import styled from 'styled-components';
+// 강좌 상세페이지 하단의 질문란 - Q, A 부분
+import React from 'react';
 
-interface IQnAItem {
+type PropsType = {
 	questionTitle: string;
 	answer: string;
-}
+};
 
-const QnAItem = ({ questionTitle, answer }: IQnAItem): ReactElement => {
+const QnAItem = ({ questionTitle, answer }: PropsType): JSX.Element => {
 	return (
-		<div className="mb-[80px]">
-			<div className="flex relative overflow-hidden">
-				<h1 className="font-['Gugi'] text-[#086ac5]">Q.</h1>
-				<div className="font-['Noto Sans KR'] pt-[15px] pr-0 pb-0 pl-[10px] text-[#848484] font-thin text-[0.8rem] mb-[35px]">
+		<div className="mb-5">
+			<div className="flex mb-3 overflow-hidden">
+				<div className="font-[Inter] text-[var(--color-onPrimary)] bg-[var(--color-Primary)] border border-[var(--color-Primary)] text-center rounded-sm p-1 w-8 h-0 pb-7">
+					Q{' '}
+				</div>
+				<div className="font-[var(--font-NotoSans)] pl-[10px] text-[#848484] my-auto">
 					{questionTitle}
 				</div>
-				<div className="absolute t-[40px] h-full border-l-[3px] border-solid border-[#e7e7e7] ml-3" />
 			</div>
-			<div className="flex">
-				<h1 className="font-['Gugi'] text-[#ea0000]">A.</h1>
-				<div className="font-['Noto Sans KR'] pt-[15px] pl-[10px] text-[#393939] font-bold">
-					{answer}
+			<div className="mb-2 border-b border-dashed "></div>
+			<div className="flex overflow-hidden">
+				<div className="font-[Inter] text-[var(--color-Primary)] border border-[var(--color-Primary)] text-center rounded-sm p-1 w-8 h-0 pb-7">
+					A
 				</div>
+				<div className="pl-[10px] text-[#848484] my-auto">{answer}</div>
 			</div>
 		</div>
 	);
 };
 
 export default QnAItem;
-const Question = styled.div`
-	font-family: 'Noto Sans KR';
-	padding: 15px 0 0 10px;
-	color: #848484;
-	font-weight: thin;
-	font-size: 0.8rem;
-	margin-bottom: 35px;
-`;
-const Answer = styled.div`
-	font-family: 'Noto Sans KR';
-	padding: 15px 0 0 10px;
-	color: #393939;
-	font-weight: bold;
-`;
-const LineDeco = styled.div`
-	position: absolute;
-	top: 40px;
-	height: 100%;
-	border-width: 0 0 0 3px;
-	border-style: solid;
-	border-color: #e7e7e7;
-	margin-left: 12px;
-`;

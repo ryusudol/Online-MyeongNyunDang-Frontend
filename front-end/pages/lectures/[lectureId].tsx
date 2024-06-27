@@ -1,6 +1,7 @@
-import React, { ReactElement, useRef } from 'react';
+import React, { useRef } from 'react';
+import Image from 'next/image';
+import Head from 'next/head';
 import ReactPlayer from 'react-player/lazy';
-import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import Error from 'next/error';
 
@@ -18,7 +19,7 @@ type RouterQueryString = {
 	courseId: string;
 };
 
-const LecturePlayer = (): ReactElement => {
+const LecturePlayer = (): JSX.Element => {
 	const router = useRouter();
 	const { lectureId, courseId } = router.query as RouterQueryString;
 	const ref = useRef<ReactPlayer | null>(null);
@@ -28,8 +29,11 @@ const LecturePlayer = (): ReactElement => {
 	const { isLoading: isRecentLectureHistoryLoading } = useLectureHistoryFetch(
 		lectureId,
 		{
-			onSuccess: (lastTime: number) =>
-				ref?.current?.seekTo(lastTime, 'seconds'),
+			onSuccess: (lastTime: number) => {
+				if (ref.current) {
+					ref.current?.seekTo(lastTime, 'seconds');
+				}
+			},
 		},
 	);
 	const updateLectureHistory = useLectureHistoryUpdate();
@@ -55,48 +59,58 @@ const LecturePlayer = (): ReactElement => {
 		onUpdateLectureComplete();
 	};
 
-	if (isLoading) return <div>Loading....</div>;
+	if (isLoading)
+		return (
+			<Image
+				src={'/images/sky_2.gif'}
+				width={300}
+				height={300}
+				alt="loading gif"
+			/>
+		);
 
 	return (
-		<>
-			{courseId ? (
-				<LecturePlayerWrapper>
-					<div className="player-wrapper">
+		<section>
+			<Head>
+				<title>온라인명륜당 | 강의</title>
+				<meta name="description" content="온라인명륜당 강의 영상 시청 페이지" />
+			</Head>
+			<h2 className="select-none w-full bg-[var(--color-Primary)] p-8 font-['Gugi'] text-2xl text-white border-b-2 border-solid border-[var(--color-Background)]">
+				온라인명륜당
+			</h2>
+			{courseId && lectureId ? (
+				<div className="font-['Noto Sans KR'] flex flex-row min-h-screen  ">
+					<div className="">
+						{router.isReady && (
+							<LecturePicker courseId={+courseId} lectureId={lectureId} />
+						)}
+					</div>
+					<div className="flex w-full min-h-full p-10 pb-24 player-wrapper place-content-center">
 						<ReactPlayer
 							ref={ref}
-							className="react-player"
-							url={videoUrl} // 플레이어 url
+							url={videoUrl}
 							style={{ minWidth: '1080px', minHeight: '768px' }}
-							playing={true} // 자동 재생 on
-							muted={true} // 자동 재생 on
-							controls={true} // 플레이어 컨트롤 노출 여부
-							light={false} // 플레이어 모드
-							pip={true} // pip 모드(작은 화면 모달) 설정 여부
+							playing={true}
+							muted={true}
+							controls={true}
+							light={false}
+							pip={true}
+							disablePictureInPicture={true}
 							poster={
 								'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg'
-							} // 플레이어 초기 포스터 사진
+							}
 							progressInterval={10000}
 							onPause={onUpdateCurrentPlayTime}
 							onProgress={onUpdateCurrentPlayTime}
 							onEnded={onEnded}
 						/>
 					</div>
-					{router.isReady && <LecturePicker courseId={courseId} />}
-				</LecturePlayerWrapper>
+				</div>
 			) : (
 				<Error statusCode={HTTP_STATUS_CODE.NOT_FOUND} />
 			)}
-		</>
+		</section>
 	);
 };
 
 export default LecturePlayer;
-
-const LecturePlayerWrapper = styled.div`
-	font-family: 'Noto Sans KR';
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-items: center;
-	height: 100%;
-`;

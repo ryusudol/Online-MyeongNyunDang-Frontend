@@ -1,81 +1,58 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
 import Image from 'next/image';
-import styled from 'styled-components';
 
-const LearningStatus = (): ReactElement => {
+const LearningStatus = (): JSX.Element => {
 	return (
-		<Container>
-			<div style={{ color: '#9a9a9a', fontSize: '0.5rem', fontWeight: 'bold' }}>
+		<div className="w-full py-[18px] px-[23px] bg-[#343535] text-white font-['Noto Sans KR'] font-thin">
+			<div className="text-[#9a9a9a] text-[0.5rem] font-bold">
 				progress in learning
 			</div>
-			<div style={{ color: '#fff', fontSize: '1rem', fontWeight: 'bold' }}>
-				나의 학습 상황
-			</div>
-			<div style={{ display: 'flex', justifyContent: 'space-around' }}>
-				<ContentBox>
-					<div style={{ display: 'flex', textAlign: 'center' }}>
+			<div className="text-base font-bold text-white">나의 학습 상황</div>
+			<div className="flex justify-around">
+				<div className="mt-[13px]">
+					<div className="flex text-center">
 						<Image
 							src="/images/complete-course.png"
-							className="badge"
+							className="m-0 mr-[13px] w-8 h-8"
 							alt="badge"
 						/>
-						<div className="badge-text">
-							<span style={{ fontWeight: 'bold' }}>14</span> / 36
+						<div className="text-[1.3rem]">
+							<span className="font-bold">14</span> / 36
 						</div>
 					</div>
-					<div style={{ textAlign: 'center' }}>완료한 수업</div>
-				</ContentBox>
-				<ContentBox>
-					<div style={{ display: 'flex', textAlign: 'center' }}>
+					<div className="text-center">완료한 수업</div>
+				</div>
+				<div className="mt-[13px]">
+					<div className="flex text-center">
 						<Image
 							src="/images/total-learning-time.png"
-							className="badge"
+							className="m-0 mr-[13px] w-8 h-8"
 							alt="badge"
 						/>
-						<div className="badge-text">
-							<span style={{ fontWeight: 'bold' }}>2</span>h{' '}
-							<span style={{ fontWeight: 'bold' }}>53</span>m
+						<div className="text-[1.3rem]">
+							<span className="font-bold">2</span>h{' '}
+							<span className="font-bold">53</span>m
 						</div>
 					</div>
-					<div style={{ textAlign: 'center' }}>총 학습시간</div>
-				</ContentBox>
-				<ContentBox>
-					<div style={{ display: 'flex', textAlign: 'center' }}>
+					<div className="text-center">총 학습시간</div>
+				</div>
+				<div className="mt-[13px]">
+					<div className="flex text-center">
 						<Image
 							src="/images/complete-rate.png"
-							className="badge"
+							className="m-0 mr-[13px] w-8 h-8"
 							alt="badge"
 						/>
-						<div className="badge-text">
+						<div className="text-[1.3rem]">
 							{' '}
-							<span style={{ fontWeight: 'bold' }}>53 </span>%
+							<span className="font-bold">53 </span>%
 						</div>
 					</div>
-					<div style={{ textAlign: 'center' }}>학습 달성율</div>
-				</ContentBox>
+					<div className="text-center">학습 달성율</div>
+				</div>
 			</div>
-		</Container>
+		</div>
 	);
 };
 
 export default LearningStatus;
-
-const Container = styled.div`
-	.badge {
-		margin: 0 13px 0 0;
-		width: 2rem;
-		height: 2rem;
-	}
-	.badge-text {
-		font-size: 1.3rem;
-	}
-	width: 100%;
-	padding: 18px 23px;
-	background-color: #343535;
-	color: white;
-	font-family: 'Noto Sans KR';
-	font-weight: 100;
-`;
-const ContentBox = styled.div`
-	margin-top: 13px;
-`;

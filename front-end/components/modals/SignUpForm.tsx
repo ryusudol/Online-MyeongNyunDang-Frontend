@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 import {
 	fetchEmailCheck,
@@ -13,9 +14,13 @@ enum CHECK_STATUS {
 	CONFLICT = 2,
 }
 
+type PropsType = {
+	onClose: () => void;
+};
+
 //이메일 닉네임 값 받기
 //값없으면 disabled
-function SignUpForm({ onClose }: any) {
+function SignUpForm({ onClose }: PropsType): JSX.Element {
 	const router = useRouter();
 
 	// 0: 중복, 1: 중복확인 통과, 2: 초기 상태
@@ -27,7 +32,7 @@ function SignUpForm({ onClose }: any) {
 
 	const [sendingMail, setSendingMail] = useState(false);
 
-	const handleSubmit = async (e: any) => {
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
 		if (
@@ -40,8 +45,8 @@ function SignUpForm({ onClose }: any) {
 			return;
 		}
 
-		const email: string = e.target.email.value;
-		const nickname: string = e.target.nickname.value;
+		const email: string = e.currentTarget.email.value;
+		const nickname: string = e.currentTarget.nickname.value;
 		setSendingMail(true);
 
 		try {
@@ -53,8 +58,8 @@ function SignUpForm({ onClose }: any) {
 				router.push('/auth/signup/mail-failed');
 				onClose();
 			}
-		} catch (e: any) {
-			console.log(e.message);
+		} catch (e: unknown) {
+			console.log('Error');
 		}
 	};
 
@@ -63,12 +68,14 @@ function SignUpForm({ onClose }: any) {
 			setValue: React.Dispatch<React.SetStateAction<string>>,
 			setUnique: React.Dispatch<React.SetStateAction<CHECK_STATUS>>,
 		) =>
-		(e: any) => {
+		(e: React.ChangeEvent<HTMLInputElement>) => {
 			setValue(e.target.value);
 			setUnique(CHECK_STATUS.NONE);
 		};
 
-	const handleClickEmailCheck = async (e: any) => {
+	const handleClickEmailCheck = async (
+		e: React.MouseEvent<HTMLButtonElement>,
+	) => {
 		e.preventDefault();
 		if (!emailValue) return;
 		try {
@@ -77,12 +84,14 @@ function SignUpForm({ onClose }: any) {
 			else if (res.data.statusCode === 409)
 				setEmailUnique(CHECK_STATUS.CONFLICT);
 			else throw new Error('Wrong status code from response or no response');
-		} catch (e: any) {
-			console.log(e.message);
+		} catch (e: unknown) {
+			console.log('Error');
 		}
 	};
 
-	const handleClickNicknameCheck = async (e: any) => {
+	const handleClickNicknameCheck = async (
+		e: React.MouseEvent<HTMLButtonElement>,
+	) => {
 		e.preventDefault();
 		if (!nicknameValue) return;
 		try {
@@ -91,8 +100,8 @@ function SignUpForm({ onClose }: any) {
 			else if (res.data.statusCode === 409)
 				setNicknameUnique(CHECK_STATUS.CONFLICT);
 			else throw new Error('Wrong status code from response or no response');
-		} catch (e: any) {
-			console.log(e.message);
+		} catch (e: unknown) {
+			console.log('Error');
 		}
 	};
 
@@ -100,8 +109,10 @@ function SignUpForm({ onClose }: any) {
 		<>
 			{sendingMail ? (
 				<div className="flex justify-center items-center h-[400px]">
-					<img
+					<Image
 						className="w-[100px]"
+						width={300}
+						height={300}
 						src="https://mblogthumb-phinf.pstatic.net/MjAxODEwMjNfNjAg/MDAxNTQwMjg2OTk2NTcw.mfWKPtzKVO1mJaBBIFKIkVBlMQQIF1Vc-yrlbbGaoP0g.KNJWAgMmhsfQrZI3n0UT-LMi_qpHAZls4qPMvbNaJBcg.GIF.chingguhl/Spinner-1s-200px.gif?type=w800"
 						alt="loading"
 					/>

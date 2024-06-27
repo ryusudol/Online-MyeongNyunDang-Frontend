@@ -3,3 +3,11 @@ export const userLoginAuthState = {
 	LOGGINED: 1,
 	NOT_LOGGINED: 2,
 };
+
+export const userState = {
+	ADMIN: 1,
+	MANAGER: 2,
+	STUDENT: 3,
+	USER: 4,
+	NOT_LOGGED_IN: 5,
+};

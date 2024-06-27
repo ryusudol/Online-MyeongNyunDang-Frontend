@@ -9,19 +9,19 @@ import {
 
 const functions = {
 	fetchRecentLectures: async (): Promise<ILatestLecture[]> => {
-		const res = await axiosInstance.get('history', {
+		const res = await axiosInstance.get('/history', {
 			willUseCustomErrorHandler: true,
 		});
 		return res.data;
 	},
 	fetchCompletedCourses: async (): Promise<ICourseInfo[]> => {
-		const res = await axiosInstance.get('completed', {
+		const res = await axiosInstance.get('/completed', {
 			willUseCustomErrorHandler: true,
 		});
 		return res.data;
 	},
 	fetchCurrentLearningCourses: async (): Promise<ICourseInfo[]> => {
-		const res = await axiosInstance.get('enrollment', {
+		const res = await axiosInstance.get('/enrollment', {
 			willUseCustomErrorHandler: true,
 		});
 		return res.data;

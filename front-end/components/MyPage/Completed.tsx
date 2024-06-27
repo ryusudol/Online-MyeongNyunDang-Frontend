@@ -1,56 +1,56 @@
 import React from 'react';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 import { useCompletedCourseFetch } from 'query/hooks/MyPage';
-import MyPageLayout from '@components/MyPage/MyPageLayout';
-import BreadCrumb from '@components/common/BreadCrumb';
-import { MYPAGE_MENU } from 'constants/MyPage';
-import { MyPageTitle } from './MyPageTitle';
+import NoContent from '@components/NoContent';
 
-const menu = [MYPAGE_MENU.COMPLETED_WATCHING_LECTURES];
-
-const Completed = () => {
+const Completed = (): JSX.Element => {
 	const router = useRouter();
 
 	const { data: completedCourseList, isLoading } = useCompletedCourseFetch();
+
+	if (isLoading)
+		return (
+			<Image
+				src={'/images/sky_2.gif'}
+				width={300}
+				height={300}
+				alt="loading gif"
+			/>
+		);
+	if (!completedCourseList || completedCourseList.length === 0)
+		return <NoContent text="수강 완료한 강좌가 없습니다." />;
 
 	const handleClick = (courseId: number) => () => {
 		router.push(`/courses/${courseId}`);
 	};
 
-	if (isLoading) return <div>isLoading...</div>;
-
 	return (
-		<MyPageLayout>
-			<BreadCrumb
-				category={'MY PAGE'}
-				menu={menu}
-				containerPadding={'1rem 0'}
-			/>
-			<MyPageTitle title={MYPAGE_MENU.COMPLETED_WATCHING_LECTURES} />
-			<div className="grid gap-x-4 gap-y-4 border-[1px] border-solid border-gray-700 grid-rows-3 grid-cols-4 p-5">
-				{!completedCourseList?.length ? (
-					<div>완료된 강의가 없습니다.</div>
-				) : (
-					completedCourseList?.map((elem, index) => (
+		<div className="bg-[var(--color-mrgreen-9)] w-full ">
+			<div className="bg-[var(--color-Surface)]">
+				<div className="grid grid-cols-4 p-5 mx-56 mb-32 tbl:mx-auto dt:grid-cols-3 tbl:grid-cols-3 mbl:grid-cols-1 gap-x-4 gap-y-4">
+					{completedCourseList?.map((elem, index) => (
 						<div
-							className="w-full overflow-hidden relative cursor-pointer"
+							className="rounded-md w-full mt-5 overflow-hidden relative cursor-pointer transition hover:scale-[1.03] bg-white"
 							onClick={handleClick(elem.course.id)}
 							key={index}
 						>
-							<img
+							<Image
 								className="aspect-video"
-								width={'100%'}
 								src={elem.course.thumbnail}
-							></img>
-							<div className="text-base text-ellipsis overflow-hidden whitespace-nowrap">
+								width={300}
+								height={300}
+								alt="Thumbnail Img"
+							/>
+							<div className="overflow-hidden text-base text-ellipsis whitespace-nowrap">
 								{elem.course.title}
 							</div>
 						</div>
-					))
-				)}
+					))}
+				</div>
 			</div>
-		</MyPageLayout>
+		</div>
 	);
 };
 

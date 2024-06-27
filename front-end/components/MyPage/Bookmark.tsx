@@ -1,9 +1,9 @@
 import React from 'react';
 
-import MyPageLayout from '@components/MyPage/MyPageLayout';
+import NoContent from '@components/NoContent';
 
-const Bookmark = () => {
-	return <MyPageLayout>즐겨찾기</MyPageLayout>;
+const Bookmark = (): JSX.Element => {
+	return <NoContent text="저장된 북마크 내역이 없습니다." />;
 };
 
 export default Bookmark;

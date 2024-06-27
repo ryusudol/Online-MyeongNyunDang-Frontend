@@ -1,5 +1,4 @@
 import React, { ReactElement, useEffect, useState } from 'react';
-import styled from 'styled-components';
 
 import axiosInstance from 'apis';
 
@@ -38,30 +37,3 @@ const MainText = (): ReactElement => {
 };
 
 export default MainText;
-
-const Container = styled.div`
-	display: flex;
-	width: 50rem;
-	flex-direction: column;
-	justify-content: center;
-	color: white;
-	padding-left: 50px;
-	& h1,
-	h2,
-	h3,
-	h4 p {
-		margin: 5px;
-	}
-	.hashtag-container {
-	}
-	.hashtag {
-		display: inline;
-		background-color: #f0f0f0;
-		color: #696969;
-		width: 100%;
-		padding: 0 0.8rem;
-		border-radius: 3rem;
-		margin: 0.2rem;
-		font-weight: bold;
-	}
-`;

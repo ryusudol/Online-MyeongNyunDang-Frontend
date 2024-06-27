@@ -1,48 +1,42 @@
 import React from 'react';
-import styled from 'styled-components';
+import Link from 'next/link';
+import { AiFillCaretRight } from 'react-icons/ai';
+
 import QnAItem from './QnAItem';
-import { useRouter } from 'next/router';
 import { IQna } from 'types/Course';
-interface IQnA {
-	courseId: string;
-	qna: IQna[];
-}
 
-const QnA = ({ courseId, qna }: IQnA) => {
-	const router = useRouter();
+type PropsType = {
+	courseId: number;
+	qna: IQna[] | undefined;
+};
+
+const QnA = ({ courseId, qna }: PropsType): JSX.Element => {
+	if (!qna) return <div>There is no Q&A data . . .</div>;
+
 	const recentQna = qna.slice(0, 3);
-
-	const handleClick = () => {
-		router.push(`/questions/course/${courseId}`);
-	};
+	const qnaCnt = qna.length;
 
 	return (
-		<Container>
-			<header>
-				<div
-					style={{
-						fontSize: '0.5rem',
-						color: '#c2c1c1',
-						fontWeight: 'bold',
-					}}
-				>
+		<section className="w-[1080px] mx-auto p-6 font-[var(--font-NotoSans)] mb-8">
+			<header className="m-0 mb-4 ">
+				<div className="text-[0.5rem] text-[#c2c1c1] font-bold">
 					Recent Questions
 				</div>
-				<div style={{ display: 'flex' }}>
-					<h2 style={{ paddingRight: '18px' }}>최근 한 질문</h2>
-					{recentQna.length > 0 && (
-						<MoreButton onClick={handleClick}>질문 더보기</MoreButton>
-					)}
+				<div className="flex">
+					<h3 className="pr-[18px] font-semibold text-3xl">최근 한 질문</h3>
+					<Link href={`/questions/course/${courseId}`} passHref>
+						<div className="flex text-xs hover:opacity-90 font-medium my-auto text-[var(--color-onPrimary)] bg-[var(--color-Primary)] rounded-md py-1 px-2 cursor-pointer">
+							{qnaCnt > 0 ? '더보기' : '질문하기'}
+							<AiFillCaretRight className="my-auto" />
+						</div>
+					</Link>
 				</div>
 			</header>
-
-			{recentQna.length === 0 && (
-				<div style={{ display: 'flex', alignItems: 'center' }}>
-					<div style={{ padding: '0 18px' }}>첫 질문의 주인공이 되어보세요</div>
-					<MoreButton onClick={handleClick}>질문 올려보기</MoreButton>
+			{qnaCnt === 0 && (
+				<div className="flex items-center">
+					<div className="py-0 px-[18px]">첫 질문의 주인공이 되어보세요</div>
 				</div>
 			)}
-
 			{recentQna.map((ele) => {
 				return (
 					<QnAItem
@@ -52,53 +46,8 @@ const QnA = ({ courseId, qna }: IQnA) => {
 					/>
 				);
 			})}
-		</Container>
+		</section>
 	);
 };
 
 export default QnA;
-
-const Container = styled.div`
-	width: 80%;
-	margin: auto;
-	padding: 25px;
-	font-family: 'Noto Sans KR';
-
-	& header {
-		margin: 0 0 16px 18px;
-	}
-	& li {
-		border-bottom: solid;
-		border-color: #dfdfdf;
-		color: #393939;
-		font-size: 0.95rem;
-		margin: 3px 0;
-	}
-	& p {
-		color: #bcbcbc;
-		font-size: 0.8rem;
-		font-weight: bold;
-	}
-	& ul {
-		margin: 0;
-		padding: 0 0 0 15px;
-	}
-	& h3,
-	h1,
-	h2 {
-		margin: 0;
-		color: #393939;
-	}
-	& h2 {
-		font-weight: bold;
-	}
-`;
-
-const MoreButton = styled.div`
-	color: #f2f4f6;
-	background: #7dad47;
-	border-radius: 7px;
-	padding: 8px 12px;
-	cursor: pointer;
-	font-weight: 600;
-`;

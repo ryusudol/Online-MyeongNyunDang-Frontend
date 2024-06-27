@@ -50,22 +50,34 @@ export interface ICourseDetail {
 	is_logged_in: boolean;
 	has_enrolled: boolean;
 }
+
+export interface Question {
+	id: number;
+	title: string;
+	contents: string;
+	createdAt: Date;
+	author: { email: string; nickname: string };
+	answers: Answer[];
+}
+
+export interface Answer {
+	authorId: number;
+	contents: string;
+	createdAt: string;
+	id: number;
+	questionId: number;
+	author: {
+		id: number;
+		nickname: string;
+		joinedAt: string;
+		role: number;
+		email: string;
+	};
+}
+
 export interface IQna {
 	answercount: number;
-	answers: {
-		authorId: number;
-		contents: string;
-		createdAt: string;
-		id: number;
-		questionId: number;
-		author: {
-			id: number;
-			nickname: string;
-			joinedAt: string;
-			role: number;
-			email: string;
-		};
-	}[];
+	answers: Answer[];
 	author: { id: number; nickname: string };
 	contents: string;
 	createdAt: string;
@@ -77,4 +89,20 @@ export interface ICourseListParams {
 	category2sId?: string;
 	keyword?: string;
 	difficulty: string;
+}
+
+export interface IPopularCourse {
+	id: number;
+	category1: string;
+	courseTitle: string;
+	instructorName: string;
+	enrollmentCount: number;
+	courseCreatedAt: string;
+	updatedAt: string;
+	course: ICourseInfo;
+}
+
+export interface ResponseType {
+	message: string;
+	statusCode: number;
 }

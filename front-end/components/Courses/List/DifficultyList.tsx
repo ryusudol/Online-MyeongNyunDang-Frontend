@@ -1,13 +1,12 @@
-import React, { useState, useRef } from 'react';
-import styled from 'styled-components';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+
 interface ICardProps {
-	title: string;
+	// title: string;
 	type: string[];
 }
 
-const DifficultyList = ({ title, type }: ICardProps) => {
+const DifficultyList = ({ type }: ICardProps): JSX.Element => {
 	const router = useRouter();
 	const initialRenderRef = useRef(false);
 	const [checkedList, setCheckedList] = useState([false, false, false]);
@@ -43,32 +42,36 @@ const DifficultyList = ({ title, type }: ICardProps) => {
 			pathname: '/courses',
 			query,
 		});
-	}, [checkedList]);
+	}, [checkedList, router]);
 
 	return (
-		<Wrapper>
-			<TypeHeader>{title}</TypeHeader>
+		// 가운데 정렬
+		// <div className="my-5 px-5 flex rounded-md focus:outline-none space-x-4">
+		<div className="my-5 px-2 flex place-content-center rounded-md focus:outline-none space-x-4">
 			{type.map((x, index) => (
-				<div key={x} style={{ color: 'rgb(120, 120, 120)' }}>
-					<input type="checkbox" onClick={handleClick(index)} name={x} /> {x}
-				</div>
+				<label
+					className={`border-[1.5px] rounded-full px-3 py-1 inline-flex items-center 
+					 ${
+							checkedList[index]
+								? 'text-[var(--color-mrgreen-5)] border-[var(--color-mrgreen-5)] hover:bg-[var(--color-mrgreen-0)]'
+								: 'text-[var(--color-dark-2)] border-[var(--color-gray-3)] hover:bg-[var(--color-gray-1)]'
+						} 
+					`}
+					key={x}
+				>
+					<span className="absolute w-1 h-1 overflow-hidden ">
+						<input
+							className="opacity-0"
+							type="checkbox"
+							onClick={handleClick(index)}
+							name={x}
+						/>
+					</span>
+					{x}
+				</label>
 			))}
-		</Wrapper>
+		</div>
 	);
 };
-const Wrapper = styled.div`
-	justify-content: center;
-	align-items: center;
-`;
-
-const TypeHeader = styled.div`
-	font-weight: 700;
-	color: rgb(89, 89, 89);
-	border-bottom: 1px solid rgb(228, 228, 228);
-	border-top: 1px solid rgb(228, 228, 228);
-	margin: 1rem 0;
-	padding: 0.5rem;
-	align-items: center;
-`;
 
 export default DifficultyList;

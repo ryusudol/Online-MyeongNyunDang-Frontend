@@ -1,14 +1,16 @@
 import React, { ReactElement, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { AxiosResponse } from 'axios';
 
+import { userLoginAuthState, userState } from 'constants/commonState';
 import { fetchLogInCallback } from 'apis/LogIn/logInApi';
-import { userLoginAuthState } from 'constants/commonState';
 import { commonActions } from 'store/feature/common/commonSlice';
 
 const LogInCallback = (): void | ReactElement => {
 	const router = useRouter();
+
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -19,6 +21,7 @@ const LogInCallback = (): void | ReactElement => {
 				.then((res: AxiosResponse) => {
 					if (res.status === 200) {
 						dispatch(commonActions.setIsLoggined(userLoginAuthState.LOGGINED));
+						dispatch(commonActions.setUserType(userState.USER));
 						router.replace('/');
 					} else {
 						router.replace('/auth/callbackError', '/');
@@ -31,8 +34,14 @@ const LogInCallback = (): void | ReactElement => {
 	}, [dispatch, router]);
 
 	return (
-		<div>
-			<h3>redirecting to server...</h3>
+		<div className="w-full h-full m-auto">
+			<Image
+				src="/images/sky_2.gif"
+				width={300}
+				height={300}
+				alt="Loading Image"
+			/>
+			<h4>Redirecting to Server . . .</h4>
 		</div>
 	);
 };

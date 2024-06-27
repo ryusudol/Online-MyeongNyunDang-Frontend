@@ -26,3 +26,15 @@ export interface ICourse {
 	};
 	enrollmentCount: number;
 }
+
+export interface MainCourse {
+	id: number;
+	courseId: number;
+	order: number;
+	sequence: number;
+	thumbnail: string;
+	category1: string;
+	title: string;
+	description: string;
+	instructor: string;
+}

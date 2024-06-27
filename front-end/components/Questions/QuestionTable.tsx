@@ -3,14 +3,14 @@ import React from 'react';
 import { IQna } from 'types/Course';
 import QuestionBox from './QuestionBox';
 
-interface IQuestionTable {
+type PropsType = {
 	courseName: string;
 	qna: IQna[];
-}
+};
 
-const QuestionTable = ({ courseName, qna }: IQuestionTable) => {
+const QuestionTable = ({ courseName, qna }: PropsType): JSX.Element => {
 	return (
-		<ul>
+		<ul className="mt-3 mb-24 border-y border-y-gray-400">
 			{qna.map((question) => {
 				return (
 					<QuestionBox

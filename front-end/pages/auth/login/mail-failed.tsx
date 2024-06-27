@@ -1,11 +1,10 @@
-import React, { ReactElement } from 'react';
-import styled from 'styled-components';
+import React from 'react';
 import Image from 'next/image';
 
-const LoginMailFailed = (): ReactElement => {
+const LoginMailFailed = (): JSX.Element => {
 	return (
-		<Container>
-			<MessageBox>
+		<div className="w-full h-full flex justify-center items-center bg-[#f0f0f0]">
+			<div className="flex flex-col justify-center items-center pb-[50px] w-[600px] h-[450px] bg-white rounded-[30px]">
 				<Image
 					src="/images/mail_failed.jpg"
 					width={200}
@@ -14,29 +13,9 @@ const LoginMailFailed = (): ReactElement => {
 				/>
 				<h1>이메일이 발송되지 않았습니다</h1>
 				<div>이메일 주소를 확인 후 다시 진행해주세요.</div>
-			</MessageBox>
-		</Container>
+			</div>
+		</div>
 	);
 };
 
 export default LoginMailFailed;
-
-const Container = styled.div`
-	width: 100%;
-	height: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	background-color: #f0f0f0;
-`;
-const MessageBox = styled.div`
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	padding-bottom: 50px;
-	width: 600px;
-	height: 450px;
-	background-color: white;
-	border-radius: 30px;
-`;

@@ -31,7 +31,7 @@ const functions = {
 			contents,
 		});
 	},
-	fetchCourseDetailQna: (courseId?: string): Promise<IQna[]> => {
+	fetchCourseDetailQna: (courseId?: number): Promise<IQna[]> => {
 		return axiosInstance
 			.get(`/questions/course/${courseId}`)
 			.then((res) => res.data);

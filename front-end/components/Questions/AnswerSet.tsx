@@ -1,45 +1,36 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
 
-import { Container } from 'pages/questions/[questionId]';
 import AnswerDetail from './AnswerDetail';
+import { Answer } from 'types/Course';
 
-const AnswerSet = ({ answers }: any) => {
-	const [orderedAnswer, setorderedAnswer] = useState<any[]>([]);
+type PropsType = {
+	answers: Answer[];
+};
+
+const AnswerSet = ({ answers }: PropsType): JSX.Element => {
+	const [orderedAnswer, setorderedAnswer] = useState<Answer[]>([]);
 
 	useEffect(() => {
 		const orderedDate = answers?.sort(
-			(a, b) => new Date(a.createdAt) - new Date(b.createdAt),
+			(a: Answer, b: Answer) =>
+				new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
 		);
 		setorderedAnswer(orderedDate);
 	}, [answers]);
 
 	return (
-		<Wrapper>
-			<Container>
-				<div className="answer-desc">
-					총 {answers?.length}개의 답변이 달렸습니다.
+		<div className="w-[800px] mbl:w-[300px] m-auto my-8 border-t-2">
+			<div className="">
+				<div className="my-4 mx-auto font-bold pl-4 text-[1.2rem]">
+					답변{' '}
+					<span className="text-[var(--color-Primary)]">{answers?.length}</span>
 				</div>
-			</Container>
-			{orderedAnswer?.map((answer: any) => {
-				return <AnswerDetail key={answer?.id} answers={answer} />;
+			</div>
+			{orderedAnswer?.map((answer: Answer) => {
+				return <AnswerDetail key={answer?.id} answer={answer} />;
 			})}
-		</Wrapper>
+		</div>
 	);
 };
 
 export default AnswerSet;
-
-const Wrapper = styled.div`
-	border: solid;
-	margin: 2rem auto;
-	background-color: #f8f9fa;
-	border: 1px solid #e9ecef;
-	.answer-desc {
-		/* width: 800px; */
-		margin: 1rem auto;
-		font-weight: bold;
-		padding-left: 1rem;
-		font-size: 1.2rem;
-	}
-`;

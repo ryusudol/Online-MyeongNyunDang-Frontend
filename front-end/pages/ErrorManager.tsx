@@ -10,7 +10,7 @@ const ErrorManager = ({
 	children,
 }: {
 	children?: ReactElement;
-}): ReactElement => {
+}): JSX.Element => {
 	const errorInfo = useSelector(selectErrorInfo);
 	const router = useRouter();
 	const dispatch = useDispatch();

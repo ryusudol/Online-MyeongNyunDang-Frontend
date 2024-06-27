@@ -2,6 +2,8 @@ import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 
 import { commonErrorHandler } from './commonErrorHandler';
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
 const axiosInstance = axios.create({
 	withCredentials: true,
 	baseURL: process.env.NEXT_PUBLIC_API_BASEURL,
